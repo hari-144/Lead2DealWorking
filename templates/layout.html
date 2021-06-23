@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" >
+    
+    
+    <script src="static/js/jquery-3.5.1.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap4-toggle.min.js"></script>
+    <script src="static/js/local.js"></script>
+    
+    <script src="static/js/popper.min.js"></script>
+
+    <link rel="stylesheet" href="static/css/bootstrap4-toggle.min.css"/>
+    <link rel="stylesheet" href="static/css/local.css"/>
+    
+    <title>
+{% block title %}
+{% endblock %}
+
+    </title>
+    {% block additional_script %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-extend-md navbar-light br-light">
+        <a class="navbar-brand" href="">
+          <img src="static\image\favicon.ico" alt="Teleperformance Logo"/><h5 class="txext-secondary">Lead2Deal&nbsp;Data&nbsp;Annotator</h5>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false" area-label="Toggle nav button">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">View Records</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    {% block body %}
+    {% endblock %}
+
+   
+    
+  </body>
+</html>

@@ -1,0 +1,269 @@
+{% extends 'layout.html' %}
+
+{% block title%}Lead2Deal{% endblock %}
+
+
+{% block additional_script%}
+<!-- <script type="text/javascript" src="static/js/canvas2image.js"></script> -->
+<script>
+    // var canvas = document.getElementById("page");
+    var dataURL = null;
+    var canvas_x = 0;
+    var canvas_y = 0;
+    var mouse_x = 0;
+    var mouse_y = 0;
+    var last_x = 0;
+    var last_y = 0;
+    var mopuse_down = false;
+    var canvasBackground;
+
+
+
+
+    var temp_x, temp_y, temp_w, temp_h;
+
+$(function(){
+    $("canvas").mouseover(function(){
+        if(loadStatus == true){
+            $("canvas").css("cursor", "crosshair");
+                canvas_x = $("canvas").offset().left;
+                canvas_y = $("canvas").offset().top;
+                mouse_x = 0;
+                mouse_y = 0;
+                last_x = 0;
+                last_y = 0;
+                canvasBackground = new Image();
+                canvasBackground.src = currentImage;
+                mopuse_down = false;
+        }else{
+            $("canvas").css("cursor", "default");
+        }
+    })
+})
+
+$(function(){
+    $("canvas").mousedown(function(e){
+        last_x = parseInt(e.clientX - canvas_x);
+        last_y = parseInt(e.clientY - canvas_y);
+        mouse_down = true;
+    });
+})
+
+$(function(){
+    $("canvas").mouseup(function(e){
+        mouse_down = false;
+    })
+})
+
+$(function(){
+    $("canvas").mousemove(function(e){
+        if(loadStatus == true){
+            mouse_x = parseInt(e.clientX - canvas_x);
+            mouse_y = parseInt(e.clientY - canvas_y);
+            // ctx.drawImage(canvasBackground, 0, 0, 660, 760);
+            if(mouse_down == true){//add conditions here for drag
+                ctx.clearRect(0, 0, 660, 760);
+                ctx.drawImage(canvasBackground, 0, 0, 660, 760);
+                ctx.beginPath();
+                var h = mouse_y - last_y;
+                var w = mouse_x - last_x;
+                temp_x = last_x;
+                temp_y = last_y;
+                temp_w = w;
+                temp_h = h;
+                ctx.rect(last_x, last_y, w, h);
+                ctx.strokeStyle  = "green";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                
+            }
+            var obj = document.getElementById("page");
+            dataURL = obj.toDataURL();
+                
+                // ctx.clearRect(0, 0, 660, 760);
+                // ctx.drawImage(canvasBackground, 0, 0, 660, 760);
+                // ctx.beginPath();
+                // ctx.rect(temp_x,temp_y, temp_w, temp_h);
+                // ctx.strokeStyle  = "green";
+                // ctx.lineWidth = 2;
+                // ctx.stroke();
+                // var p = $("canvas").toDataURL();
+                // alert(p);
+
+                // Canvas2Image.saveAsJPEG(canvasObj, 660, 760);
+            
+            // alert(mouse_x + "," + mouse_y + "," + last_x + "," + last_y);
+        }
+    })
+})
+$(document).ready(function(){
+    $("#tag").click(function(){
+        if(dataURL!=null){
+            var pageInfo =  $("#currentPage").val();
+            $("#identifiedAt").val(temp_x + "," + temp_y + "," + temp_w + "," + temp_h);
+            var fId = $("#category").val();
+            $("#FieldId_" + fId).html("<span class='text-primary'>" + pageInfo + "," + temp_x + "," + temp_y + "," + temp_w + "," + temp_h +"</span>");
+            // $("#identifiedAt").val("");
+            // $("#category")[0].selectedIndex = 0;
+
+            //FieldId_9
+            //alert(dataURL);
+            dataURL = null;
+        }
+    
+    });
+})
+
+
+    //canvas.getContext("2d");
+    // var canvas_x = $(canvas).offset().left;
+    // var canvas_y = $(canvas).offset().top;
+    // var mouse_x = mouse_y = 0;
+    // var last_x = last_y = 0;
+    // var mopuse_down = false;
+    //
+
+    // $(document).ready(function(){
+    //     $(canvas).mouseover(function(){
+    //         alert("In")
+    //         if(loadStatus == true){
+    //             alert("Its true now!!!")
+    //             ctx = canvas.getContext("2d");
+    //             $(canvas).css("cursor", "crosshair");
+    //         }else{
+    //             $(canvas).css("cursor", "default");
+    //         }
+
+    //     });
+    // })
+
+// Mouse down event def
+
+
+</script>
+
+
+{% endblock %}
+
+{% block body %}
+
+<div id="wait_element">
+    <div id='wait'><img src='static/image/wait.gif'/></div>
+</div>
+
+<div class="container-fluid">
+    
+            
+    
+    <div class="row">
+        <div class="col col-md-2">
+            <div class="row leftContainer">
+                <div class="col">&nbsp;
+                    <ul class="list-group list-group-flush">
+                        {% for file in context.files %}
+                        <li class="list-group-item"><a href="javascript:void" class="text-primary" onclick="setFileName('{{ file.file_name }}')"><span> <i class="fas fa-file-pdf"></i></span>{{ file.file_name }}</a></li> 
+                        {% endfor %}
+
+                    </ul>
+                    
+
+                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">&nbsp;</div>
+            </div>
+            <div class="row leftContainer">
+                <div class="col" id="pageImages">
+
+                </div>
+            </div>
+        </div>
+<div class="col col-md-6">
+    <canvas id="page" width="660" height="450"></canvas>
+</div>
+<div class="col col-md-4">
+   <div class="row form-group">
+       <div class="col col-md-6">
+           <label for="category">Category</label>
+            <select class="form-select" aria-label="" name="category" id="category">
+                <option selected>Select</option>
+                <option value="1">Company overview</option>
+                <option value="2">Scope of service</option>
+                <option value="3">Languages</option>
+                <option value="4">Channels</option>
+                <option value="5">HOOPS</option>
+                <option value="6">Contract term</option>
+                <option value="7">Invoicing Methods</option>
+                <option value="8">Key Milestones</option>
+                <option value="9">FTE In-Scope</option>
+                <option value="10">Agent skillset</option>
+                <option value="11">Countries</option>
+                <option value="12">Currency</option>
+                <option value="13">Location preference</option>
+                <option value="14">Key callouts</option>
+                <option value="15">Documents attached</option>
+                <option value="16">Target price</option>
+               
+
+            </select>
+       </div>
+       <div class="col col-md-6">
+           <label for="identifiedAt">Located at</label>
+           <input type="text" class="form-control form-control-sm" name="identifiedAt" id="identifiedAt"/>
+       </div>
+   </div>
+   <div class="row">
+    <div class="col col-md-6">
+        <label for="currentPage">Current Page</label>
+        <input type="text" class="form-control form-control-sm" name="currentPage" id="currentPage"/>
+    </div>
+       <div class="col col-md-6 py-4">
+           <button type="button" id="tag" class="btn btn-sm btn-danger">Tag now</button>
+       </div>
+   </div>
+
+   <div class="row">
+       <div class="col">
+           <table class="table table-striped">
+               <thead>
+                   <tr>
+                       <th>Field Id</th>
+                       <th>Field Description</th>
+                       <th>Location</th>
+
+                   </tr>
+               </thead>
+               <tbody>
+                <tr><td>1</td><td>Company overview</td><td id='FieldId_1'></td></tr>
+                <tr><td>2</td><td>Scope of service</td><td id='FieldId_2'></td></tr>
+                <tr><td>3</td><td>Languages</td><td id='FieldId_3'></td></tr>
+                <tr><td>4</td><td>Channels</td><td id='FieldId_4'></td></tr>
+                <tr><td>5</td><td>HOOPS</td><td id='FieldId_5'></td></tr>
+                <tr><td>6</td><td>Contract term</td><td id='FieldId_6'></td></tr>
+                <tr><td>7</td><td>Invoicing Methods</td><td id='FieldId_7'></td></tr>
+                <tr><td>8</td><td>Key Milestones</td><td id='FieldId_8'></td></tr>
+                <tr><td>9</td><td>FTE In-Scope</td><td id='FieldId_9'></td></tr>
+                <tr><td>10</td><td>Agent skillset</td><td id='FieldId_10'></td></tr>
+                <tr><td>11</td><td>Countries</td><td id='FieldId_11'></td></tr>
+                <tr><td>12</td><td>Currency</td><td id='FieldId_12'></td></tr>
+                <tr><td>13</td><td>Location preference</td><td id='FieldId_13'></td></tr>
+                <tr><td>14</td><td>Key callouts</td><td id='FieldId_14'></td></tr>
+                <tr><td>15</td><td>Documents attached</td><td id='FieldId_15'></td></tr>
+                <tr><td>16</td><td>Target price</td><td id='FieldId_16'></td></tr>
+                
+               </tbody>
+           </table>
+       </div>
+    </div>
+</div>
+
+
+
+    </div>
+</div>
+
+{% endblock %}
+
+
